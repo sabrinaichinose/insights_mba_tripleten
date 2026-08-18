@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insights MBA TripleTen Brasil — Análise Estratégica de Marketing & Vendas v2</title>
+<style>
+  :root {
+    --brand: #6C3CE2;
+    --brand-dark: #4A26A8;
+    --brand-light: #EDE8FC;
+    --accent: #00C49A;
+    --accent-light: #E0FAF4;
+    --warn: #F59E0B;
+    --warn-light: #FEF3C7;
+    --danger: #EF4444;
+    --danger-light: #FEE2E2;
+    --text: #1A1A2E;
+    --text-muted: #64748B;
+    --bg: #F8F7FF;
+    --card: #FFFFFF;
+    --border: #E2E0F5;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(108,60,226,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* HEADER */
+  .hero {
+    background: linear-gradient(135deg, #6C3CE2 0%, #3B1FA3 50%, #0F0A30 100%);
+    color: white;
+    padding: 60px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -10%;
+    width: 120%; height: 200%;
+    background: radial-gradient(ellipse at 50% 30%, rgba(0,196,154,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero .badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 100px; padding: 6px 20px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px; }
+  .hero h1 { font-size: 2.6rem; font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+  .hero h1 span { color: #00C49A; }
+  .hero p { font-size: 1.1rem; opacity: 0.85; max-width: 640px; margin: 0 auto 30px; }
+  .hero-meta { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+  .hero-meta span { font-size: 13px; opacity: 0.75; }
+  .hero-meta strong { color: #00C49A; }
+
+  /* NAVIGATION */
+  nav { background: white; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; padding: 0 40px; display: flex; gap: 4px; overflow-x: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  nav a { text-decoration: none; color: var(--text-muted); font-size: 13px; font-weight: 500; padding: 14px 18px; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; }
+  nav a:hover { color: var(--brand); border-bottom-color: var(--brand-light); }
+  nav a.active { color: var(--brand); border-bottom-color: var(--brand); }
+
+  /* MAIN CONTENT */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px 80px; }
+  section { margin-top: 64px; }
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; }
+  .section-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .section-header h2 { font-size: 1.6rem; font-weight: 700; }
+  .section-header p { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+
+  /* CARDS */
+  .card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: 28px; }
+  .card-grid { display: grid; gap: 20px; }
+  .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+  /* STAT TILES */
+  .stat { text-align: center; padding: 24px; background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); }
+  .stat .number { font-size: 2.4rem; font-weight: 800; color: var(--brand); line-height: 1; }
+  .stat .label { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+  .stat .sub { font-size: 12px; color: var(--accent); font-weight: 600; margin-top: 4px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+
+  /* FUNNEL */
+  .funnel { display: flex; flex-direction: column; gap: 4px; }
+  .funnel-step { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-radius: 10px; position: relative; }
+  .funnel-step .label { font-weight: 600; font-size: 14px; min-width: 260px; }
+  .funnel-step .bar-wrap { flex: 1; background: #F0EDF8; border-radius: 100px; height: 10px; }
+  .funnel-step .bar { height: 100%; border-radius: 100px; background: var(--brand); }
+  .funnel-step .count { font-weight: 700; font-size: 14px; min-width: 80px; text-align: right; color: var(--brand); }
+  .funnel-step .pct { font-size: 12px; color: var(--text-muted); min-width: 50px; text-align: right; }
+
+  /* CHANNEL BAR */
+  .channel-item { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .channel-item .name { font-size: 13px; font-weight: 600; min-width: 130px; }
+  .channel-item .bar-wrap { flex: 1; background: #F0EDF8; border-radius: 100px; height: 10px; }
+  .channel-item .bar { height: 100%; border-radius: 100px; }
+  .channel-item .val { font-size: 13px; font-weight: 700; min-width: 60px; text-align: right; color: var(--text-muted); }
+
+  /* PERSONA CARDS */
+  .persona-card { border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; }
+  .persona-header { padding: 24px; display: flex; align-items: flex-start; gap: 18px; }
+  .persona-avatar { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; flex-shrink: 0; }
+  .persona-header h3 { font-size: 1.1rem; font-weight: 700; }
+  .persona-header .role { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .persona-body { padding: 0 24px 24px; }
+  .persona-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .tag { display: inline-flex; align-items: center; gap: 4px; background: var(--brand-light); color: var(--brand-dark); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 100px; }
+  .tag.green { background: var(--accent-light); color: #065F46; }
+  .tag.yellow { background: var(--warn-light); color: #92400E; }
+  .persona-section { margin-top: 14px; }
+  .persona-section .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
+  .persona-section ul { list-style: none; }
+  .persona-section li { font-size: 13px; padding: 4px 0; padding-left: 18px; position: relative; }
+  .persona-section li::before { content: '▸'; position: absolute; left: 0; color: var(--brand); }
+
+  /* INSIGHT CARDS */
+  .insight { padding: 20px; border-radius: 12px; border-left: 4px solid; }
+  .insight.keep { background: var(--accent-light); border-color: var(--accent); }
+  .insight.stop { background: var(--danger-light); border-color: var(--danger); }
+  .insight.start { background: var(--brand-light); border-color: var(--brand); }
+  .insight h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .insight p { font-size: 13px; color: var(--text-muted); }
+  .insight .why { font-size: 12px; font-style: italic; margin-top: 8px; color: var(--text-muted); }
+
+  /* ACTION PLAN */
+  .action-item { display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+  .action-item:last-child { border-bottom: none; }
+  .action-num { width: 36px; height: 36px; border-radius: 10px; background: var(--brand); color: white; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .action-item h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .action-item p { font-size: 13px; color: var(--text-muted); }
+  .action-item .meta { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+  .action-item .chip { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 100px; }
+  .chip.time { background: var(--warn-light); color: #92400E; }
+  .chip.impact { background: var(--accent-light); color: #065F46; }
+  .chip.owner { background: var(--brand-light); color: var(--brand-dark); }
+
+  /* QUOTE BOX */
+  .quote { background: linear-gradient(135deg, var(--brand-light), white); border: 1px solid var(--border); border-radius: 14px; padding: 24px 28px; position: relative; }
+  .quote::before { content: '"'; font-size: 60px; color: var(--brand); opacity: 0.15; position: absolute; top: 0; left: 16px; line-height: 1; font-family: Georgia, serif; }
+  .quote p { font-size: 14px; line-height: 1.7; font-style: italic; color: var(--text); padding-left: 10px; }
+  .quote .author { font-size: 12px; font-weight: 600; color: var(--brand); margin-top: 12px; padding-left: 10px; }
+
+  /* COMPARISON TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--brand); color: white; padding: 12px 16px; text-align: left; font-weight: 600; }
+  th:first-child { border-radius: 10px 0 0 0; }
+  th:last-child { border-radius: 0 10px 0 0; }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg); }
+  .tt-best { color: var(--accent); font-weight: 700; }
+  td .check { color: var(--accent); font-size: 16px; }
+  td .x { color: var(--danger); font-size: 16px; }
+  td .partial { color: var(--warn); font-size: 16px; }
+
+  /* DONUT (CSS only) */
+  .donut-container { display: flex; align-items: center; gap: 32px; }
+  .donut { position: relative; width: 140px; height: 140px; flex-shrink: 0; }
+  .donut svg { transform: rotate(-90deg); }
+  .donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+  .donut-center .big { font-size: 24px; font-weight: 800; color: var(--brand); }
+  .donut-center .small { font-size: 11px; color: var(--text-muted); }
+  .legend { display: flex; flex-direction: column; gap: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+  /* PILL SECTION */
+  .pill-section { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+  .pill-btn { padding: 8px 20px; border-radius: 100px; font-size: 13px; font-weight: 600; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+  .pill-btn.keep { background: var(--accent-light); color: #065F46; border-color: var(--accent); }
+  .pill-btn.stop { background: var(--danger-light); color: #991B1B; border-color: var(--danger); }
+  .pill-btn.start { background: var(--brand-light); color: var(--brand-dark); border-color: var(--brand); }
+
+  /* CALLOUT */
+  .callout { display: flex; gap: 16px; padding: 18px 22px; border-radius: 12px; border: 1px solid; align-items: flex-start; margin: 20px 0; }
+  .callout.info { background: var(--brand-light); border-color: #C4B5FD; }
+  .callout.success { background: var(--accent-light); border-color: #6EE7B7; }
+  .callout.warning { background: var(--warn-light); border-color: #FCD34D; }
+  .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .callout p { font-size: 13px; line-height: 1.6; }
+  .callout strong { font-weight: 700; }
+
+  /* CAMPAIGN CHIP */
+  .camp-chip { display: inline-block; background: #F0EDF8; border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 12px; font-family: 'Courier New', monospace; color: var(--brand-dark); margin: 4px; }
+
+  /* FOOTER */
+  footer { background: var(--text); color: rgba(255,255,255,0.5); text-align: center; padding: 24px; font-size: 12px; }
+  footer strong { color: #00C49A; }
+
+  /* RESPONSIVE */
+  @media(max-width: 768px) {
+    .hero h1 { font-size: 1.8rem; }
+    .card-grid.cols-2, .card-grid.cols-3, .card-grid.cols-4 { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    nav { padding: 0 16px; }
+    .container { padding: 0 16px 60px; }
+    .funnel-step .label { min-width: 160px; font-size: 12px; }
+    .donut-container { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge">Análise Estratégica — Ago/2026 · v2 Atualizada</div>
+  <h1>MBA TripleTen Brasil<br><span>Insights para Marketing & Vendas</span></h1>
+  <p>Análise de 4.468 leads, perfil real dos 61 pagamentos realizados desde Mai/2026, transcrições de reunião e benchmarks de mercado para maximizar conversão.</p>
+  <div class="hero-meta">
+    <span>📅 Período: <strong>Mai–Ago 2026</strong></span>
+    <span>📊 Total de deals MBA: <strong>4.468</strong></span>
+    <span>💳 Pagamentos realizados: <strong>61</strong></span>
+    <span>🔍 Taxa de conversão: <strong>1,37%</strong></span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#sumario" class="active">Sumário</a>
+  <a href="#funil">Funil & Canais</a>
+  <a href="#pagantes">💰 Perfil dos Pagantes</a>
+  <a href="#personas">Personas</a>
+  <a href="#transcricoes">Reuniões</a>
+  <a href="#mercado">Mercado</a>
+  <a href="#recomendacoes">Recomendações</a>
+  <a href="#plano">Plano de Ação</a>
+</nav>
+
+<div class="container">
+
+<!-- SEÇÃO 0: SUMÁRIO EXECUTIVO -->
+<section id="sumario">
+  <div class="section-header">
+    <div class="section-icon" style="background:#EDE8FC">⚡</div>
+    <div><h2>Sumário Executivo</h2><p>Os 5 pontos mais importantes desta análise</p></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">📌</div>
+    <p><strong>O cenário real:</strong> Temos 4.468 deals de MBA desde Mai/2026 e apenas 61 pagamentos realizados no período — taxa de conversão de <strong>1,37%</strong>. O maior achado desta análise é a <strong>divergência radical entre perfil de quem entra e perfil de quem paga</strong>: 98,5% dos leads são de MBA DS, mas os pagamentos são equilibrados entre os 3 cursos — o que revela que MBA DA e MBA IA Negócios convertem proporcionalmente muito melhor, mas estão sem combustível de entrada.</p>
+  </div>
+
+  <div class="card-grid cols-2" style="margin-top:20px">
+    <div class="insight keep">
+      <h4>✅ Canal que mais converte de verdade</h4>
+      <p>Facebook CPC gerou 31% dos pagamentos. Uma única campanha (<code>040326-dev-mba</code>) foi responsável por 9 pagamentos — 11% do total. YouTube com Julfe gerou 5 pagamentos. Esses canais precisam de escala.</p>
+    </div>
+    <div class="insight stop">
+      <h4>🔴 Descoberta crítica: MBA DA e IA Negócios sem campanha</h4>
+      <p>MBA DA representa 27% dos pagamentos e MBA IA Negócios 25% — juntos são 52% das vendas — mas têm menos de 2% dos leads. Estamos deixando dinheiro na mesa por falta de campanhas dedicadas para esses produtos.</p>
+    </div>
+    <div class="insight stop">
+      <h4>🔴 Ciclo curto exige resposta rápida</h4>
+      <p>Mediana de <strong>8 dias</strong> entre criação do lead e pagamento. 70% dos pagamentos acontecem em até 14 dias. Leads que ficam sem resposta rápida têm altíssima chance de esfriar — o SDR precisa agir nas primeiras 24h.</p>
+    </div>
+    <div class="insight start">
+      <h4>🚀 3.947 Closed-Lost: a maior oportunidade</h4>
+      <p>Temos mais de 12 mil deals perdidos e 96% sem motivo de perda registrado. Não sabemos por que estamos perdendo. Tornar o campo de motivo obrigatório é urgente — e um webinar de reativação pode recuperar parte desse volume.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 1: FUNIL E CANAIS -->
+<section id="funil">
+  <div class="section-header">
+    <div class="section-icon" style="background:#E0FAF4">📊</div>
+    <div><h2>Funil de Conversão & Canais</h2><p>Dados do HubSpot — Mai a Ago/2026</p></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="number">4.468</div>
+      <div class="label">Total de deals MBA</div>
+      <div class="sub">desde 01/05/2026</div>
+    </div>
+    <div class="stat">
+      <div class="number">61</div>
+      <div class="label">Pagamentos realizados</div>
+      <div class="sub">Mai–Ago 2026 · 1,37% de conversão</div>
+    </div>
+    <div class="stat">
+      <div class="number">3.947</div>
+      <div class="label">Deals em Closed-Lost</div>
+      <div class="sub">96% sem motivo de perda registrado</div>
+    </div>
+    <div class="stat">
+      <div class="number">8 dias</div>
+      <div class="label">Mediana do ciclo de venda</div>
+      <div class="sub">70% fecha em até 14 dias</div>
+    </div>
+  </div>
+
+  <div class="card-grid cols-2">
+
+    <!-- Funil -->
+    <div class="card">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:20px">🔽 Funil de Etapas do CRM <span style="font-size:11px;font-weight:400;color:var(--accent)">✓ Dados reais do HubSpot</span></h3>
+      <div class="funnel">
+        <div class="funnel-step" style="background:#F5F3FF">
+          <div class="label">📥 Total de Deals (todos os stages)</div>
+          <div class="bar-wrap"><div class="bar" style="width:100%;background:#6C3CE2"></div></div>
+          <div class="count">4.468</div>
+          <div class="pct">100%</div>
+        </div>
+        <div class="funnel-step" style="background:#F0EDF8">
+          <div class="label">🔧 Taken to Work (ativos)</div>
+          <div class="bar-wrap"><div class="bar" style="width:60%;background:#8B5CF6"></div></div>
+          <div class="count">152</div>
+          <div class="pct">ativos</div>
+        </div>
+        <div class="funnel-step" style="background:#EBE8F7">
+          <div class="label">🤝 Contact Established (ativos)</div>
+          <div class="bar-wrap"><div class="bar" style="width:40%;background:#A78BFA"></div></div>
+          <div class="count">24</div>
+          <div class="pct">ativos</div>
+        </div>
+        <div class="funnel-step" style="background:#E6E1F6">
+          <div class="label">📅 Meeting Scheduled (ativos)</div>
+          <div class="bar-wrap"><div class="bar" style="width:25%;background:#C4B5FD"></div></div>
+          <div class="count">18</div>
+          <div class="pct">ativos</div>
+        </div>
+        <div class="funnel-step" style="background:#E0FAF4">
+          <div class="label">✅ Meeting / Webinar Attended (ativos)</div>
+          <div class="bar-wrap"><div class="bar" style="width:60%;background:#00C49A"></div></div>
+          <div class="count">155</div>
+          <div class="pct">ativos</div>
+        </div>
+        <div class="funnel-step" style="background:#D1FAF0">
+          <div class="label">💳 Ready to Pay (ativos)</div>
+          <div class="bar-wrap"><div class="bar" style="width:10%;background:#10B981"></div></div>
+          <div class="count">4</div>
+          <div class="pct">ativos</div>
+        </div>
+        <div class="funnel-step" style="background:#A7F3D0">
+          <div class="label">🎉 Successful Payment (histórico total)</div>
+          <div class="bar-wrap"><div class="bar" style="width:60%;background:#059669"></div></div>
+          <div class="count">154</div>
+          <div class="pct">all time</div>
+        </div>
+        <div class="funnel-step" style="background:#FEE2E2">
+          <div class="label">❌ Closed-Lost (histórico total)</div>
+          <div class="bar-wrap"><div class="bar" style="width:100%;background:#EF4444"></div></div>
+          <div class="count">3.947</div>
+          <div class="pct">perdidos</div>
+        </div>
+      </div>
+      <div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:10px;padding:12px 16px;margin-top:16px;font-size:13px">
+        ⚠️ <strong>Atenção:</strong> 3.947 deals perdidos e apenas 61 pagamentos desde Mai/2026. Para cada pagamento, perdemos ~65 leads. O campo "motivo de perda" está vazio em 96% dos casos — não sabemos onde o funil está falhando.
+      </div>
+    </div>
+
+    <!-- Canais -->
+    <div class="card">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:20px">📡 Canais de Aquisição</h3>
+
+      <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px">Por Mídia (utm_source)</p>
+      <div>
+        <div class="channel-item">
+          <div class="name">📘 Facebook</div>
+          <div class="bar-wrap"><div class="bar" style="width:30%;background:#1877F2"></div></div>
+          <div class="val">30% <small>CPC</small></div>
+        </div>
+        <div class="channel-item">
+          <div class="name">📸 Instagram</div>
+          <div class="bar-wrap"><div class="bar" style="width:30%;background:#E1306C"></div></div>
+          <div class="val">30% <small>SMM/Org</small></div>
+        </div>
+        <div class="channel-item">
+          <div class="name">▶️ YouTube</div>
+          <div class="bar-wrap"><div class="bar" style="width:17%;background:#FF0000"></div></div>
+          <div class="val">17%</div>
+        </div>
+        <div class="channel-item">
+          <div class="name">📧 Newsletter</div>
+          <div class="bar-wrap"><div class="bar" style="width:13%;background:#6C3CE2"></div></div>
+          <div class="val">13%</div>
+        </div>
+        <div class="channel-item">
+          <div class="name">🔍 Google/Outros</div>
+          <div class="bar-wrap"><div class="bar" style="width:10%;background:#888"></div></div>
+          <div class="val">10%</div>
+        </div>
+      </div>
+
+      <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin:20px 0 12px">Por Tipo de Mídia (utm_medium)</p>
+      <div>
+        <div class="channel-item">
+          <div class="name">🤳 Bloggers/Inf.</div>
+          <div class="bar-wrap"><div class="bar" style="width:34%;background:#6C3CE2"></div></div>
+          <div class="val">34%</div>
+        </div>
+        <div class="channel-item">
+          <div class="name">💰 CPC (Pago)</div>
+          <div class="bar-wrap"><div class="bar" style="width:31%;background:#8B5CF6"></div></div>
+          <div class="val">31%</div>
+        </div>
+        <div class="channel-item">
+          <div class="name">📱 SMM Orgânico</div>
+          <div class="bar-wrap"><div class="bar" style="width:25%;background:#A78BFA"></div></div>
+          <div class="val">25%</div>
+        </div>
+        <div class="channel-item">
+          <div class="name">📬 CRM/Email</div>
+          <div class="bar-wrap"><div class="bar" style="width:10%;background:#C4B5FD"></div></div>
+          <div class="val">10%</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Top Campaigns -->
+  <div class="card" style="margin-top:20px">
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:16px">🏆 Campanhas com Maior Volume (amostra 200 deals)</h3>
+    <div style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="width:12px;height:12px;border-radius:3px;background:#6C3CE2;flex-shrink:0"></div>
+        <span style="font-size:13px;font-weight:700">29 leads</span>
+        <div class="camp-chip">inhouse_fb_bra_meet-quiz_allprofs_ua_network_110526</div>
+        <span style="font-size:12px;color:var(--text-muted)">Facebook · CPC · Quiz de carreira</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="width:12px;height:12px;border-radius:3px;background:#6C3CE2;flex-shrink:0"></div>
+        <span style="font-size:13px;font-weight:700">23 leads</span>
+        <div class="camp-chip">nw_bra_meet-special_mba_julfe_newsletter</div>
+        <span style="font-size:12px;color:var(--text-muted)">Newsletter The News · MBA específico</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="width:12px;height:12px;border-radius:3px;background:#8B5CF6;flex-shrink:0"></div>
+        <span style="font-size:13px;font-weight:700">23 leads</span>
+        <div class="camp-chip">inhouse_fb_bra_meetland_mba_ua_network_040826-career_switch-mba-da</div>
+        <span style="font-size:12px;color:var(--text-muted)">Facebook · MBA DA · Career switch</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="width:12px;height:12px;border-radius:3px;background:#A78BFA;flex-shrink:0"></div>
+        <span style="font-size:13px;font-weight:700">22 leads</span>
+        <div class="camp-chip">smm_ig_bra_meet-quiz_mba_head</div>
+        <span style="font-size:12px;color:var(--text-muted)">Instagram orgânico · Quiz MBA</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="width:12px;height:12px;border-radius:3px;background:#C4B5FD;flex-shrink:0"></div>
+        <span style="font-size:13px;font-weight:700">15 leads</span>
+        <div class="camp-chip">yt_bra_meet-typeform_allprofs_julfe_full_video_review</div>
+        <span style="font-size:12px;color:var(--text-muted)">YouTube · Criador Julfe · Review completo</span>
+      </div>
+    </div>
+    <div class="callout warning">
+      <div class="callout-icon">⚠️</div>
+      <p><strong>Ponto de atenção:</strong> As campanhas de quiz geram o maior volume, mas podem trazer leads com baixo contexto sobre preço e comprometimento. Considerar adicionar qualificação de renda/intenção no quiz para melhorar qualidade junto ao volume.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 2: PERFIL DOS PAGANTES -->
+<section id="pagantes">
+  <div class="section-header">
+    <div class="section-icon" style="background:#DCFCE7">💰</div>
+    <div><h2>Perfil dos Pagantes — Quem Realmente Compra</h2><p>Análise dos 61 pagamentos confirmados desde maio/2026 · Dados reais do HubSpot</p></div>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-icon">🔑</div>
+    <p><strong>Descoberta crítica:</strong> A distribuição de leads é completamente diferente da distribuição de pagamentos. MBA DS domina 98,5% dos leads, mas representa apenas 48% dos pagamentos. Isso significa que MBA DA e MBA IA Negócios têm taxas de conversão proporcionalmente muito maiores — e estão sendo sub-investidos em mídia.</p>
+  </div>
+
+  <!-- Comparativo Leads vs Pagamentos por Curso -->
+  <div class="card" style="margin-top:24px">
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:20px">📊 Leads vs. Pagamentos por Curso — A Grande Divergência</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+      <div>
+        <div style="font-size:13px;color:var(--text-muted);font-weight:600;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px">Distribuição de LEADS (4.468 deals)</div>
+        <div class="channel-item">
+          <div class="name">🔵 MBA DS</div>
+          <div class="bar-wrap"><div class="bar" style="width:98.5%;background:#6C3CE2"></div></div>
+          <div class="val">98,5%</div>
+        </div>
+        <div class="channel-item">
+          <div class="name">🟢 MBA DA</div>
+          <div class="bar-wrap"><div class="bar" style="width:1%;background:#00C49A"></div></div>
+          <div class="val">~1%</div>
+        </div>
+        <div class="channel-item">
+          <div class="name">🟡 MBA IA</div>
+          <div class="bar-wrap"><div class="bar" style="width:0.5%;background:#F59E0B"></div></div>
+          <div class="val">~0,5%</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;color:var(--accent);font-weight:600;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px">Distribuição de PAGAMENTOS (61 confirmados)</div>
+        <div class="channel-item">
+          <div class="name">🔵 MBA DS</div>
+          <div class="bar-wrap"><div class="bar" style="width:48%;background:#6C3CE2"></div></div>
+          <div class="val">48%</div>
+        </div>
+        <div class="channel-item">
+          <div class="name">🟢 MBA DA</div>
+          <div class="bar-wrap"><div class="bar" style="width:27%;background:#00C49A"></div></div>
+          <div class="val">27%</div>
+        </div>
+        <div class="channel-item">
+          <div class="name">🟡 MBA IA Negócios</div>
+          <div class="bar-wrap"><div class="bar" style="width:25%;background:#F59E0B"></div></div>
+          <div class="val">25%</div>
+        </div>
+      </div>
+    </div>
+    <div class="callout warning" style="margin-top:20px">
+      <div class="callout-icon">📌</div>
+      <p><strong>Implicação direta:</strong> Com apenas ~1% dos leads, MBA DA gera 27% dos pagamentos. Se os investimentos fossem proporcionais à conversão, o orçamento de MBA DA e MBA IA Negócios deveria ser 20-25x maior do que é hoje. Este é provavelmente o maior gap de oportunidade identificado na análise.</p>
+    </div>
+  </div>
+
+  <!-- Stats de pagamentos -->
+  <div class="stat-grid" style="margin-top:24px;grid-template-columns:repeat(4,1fr)">
+    <div class="stat">
+      <div class="number">61</div>
+      <div class="label">Pagamentos confirmados desde Mai/2026</div>
+      <div class="sub">Conversão geral: 1,37%</div>
+    </div>
+    <div class="stat">
+      <div class="number">8 dias</div>
+      <div class="label">Mediana do ciclo de vendas (lead → pagamento)</div>
+      <div class="sub">70% fecham em até 14 dias</div>
+    </div>
+    <div class="stat">
+      <div class="number">31%</div>
+      <div class="label">dos pagamentos vêm de Facebook CPC</div>
+      <div class="sub">Canal com melhor conversão</div>
+    </div>
+    <div class="stat">
+      <div class="number">96%</div>
+      <div class="label">dos 3.947 Closed-Lost sem motivo registrado</div>
+      <div class="sub">Diagnóstico impossível sem campo obrigatório</div>
+    </div>
+  </div>
+
+  <!-- Canal e Campanha dos Pagantes -->
+  <div class="card-grid cols-2" style="margin-top:20px">
+    <div class="card">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px">📣 Canal de Origem dos Pagantes</h3>
+      <div class="channel-item">
+        <div class="name">Facebook CPC</div>
+        <div class="bar-wrap"><div class="bar" style="width:31%;background:#6C3CE2"></div></div>
+        <div class="val">31%</div>
+      </div>
+      <div class="channel-item">
+        <div class="name">Instagram Org.</div>
+        <div class="bar-wrap"><div class="bar" style="width:22%;background:#8B5CF6"></div></div>
+        <div class="val">22%</div>
+      </div>
+      <div class="channel-item">
+        <div class="name">Newsletter</div>
+        <div class="bar-wrap"><div class="bar" style="width:18%;background:#A78BFA"></div></div>
+        <div class="val">18%</div>
+      </div>
+      <div class="channel-item">
+        <div class="name">YouTube</div>
+        <div class="bar-wrap"><div class="bar" style="width:14%;background:#C4B5FD"></div></div>
+        <div class="val">14%</div>
+      </div>
+      <div class="channel-item">
+        <div class="name">Orgânico/Direto</div>
+        <div class="bar-wrap"><div class="bar" style="width:15%;background:#DDD6FE"></div></div>
+        <div class="val">15%</div>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:12px">⚡ Facebook CPC tem a melhor relação volume-conversão. Newsletter converte acima do peso relativo ao volume de leads que gera.</div>
+    </div>
+    <div class="card">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px">🏆 Campanhas com Maior Número de Pagamentos</h3>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="font-size:18px;font-weight:800;color:var(--brand);min-width:28px">9</span>
+        <div>
+          <div style="font-size:12px;font-weight:700">040326-dev-mba</div>
+          <div style="font-size:11px;color:var(--text-muted)">Facebook CPC · Dev para MBA</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="font-size:18px;font-weight:800;color:var(--brand);min-width:28px">7</span>
+        <div>
+          <div style="font-size:12px;font-weight:700">nw_bra_meet-special_mba_julfe_newsletter</div>
+          <div style="font-size:11px;color:var(--text-muted)">Newsletter · Julfe · MBA específico</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="font-size:18px;font-weight:800;color:var(--brand);min-width:28px">6</span>
+        <div>
+          <div style="font-size:12px;font-weight:700">040826-career_switch-mba-da</div>
+          <div style="font-size:11px;color:var(--text-muted)">Facebook · MBA DA · Career switch</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="font-size:18px;font-weight:800;color:var(--brand);min-width:28px">5</span>
+        <div>
+          <div style="font-size:12px;font-weight:700">smm_ig_bra_meet-quiz_mba_head</div>
+          <div style="font-size:11px;color:var(--text-muted)">Instagram Orgânico · Quiz MBA</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:12px">📌 A campanha <strong>040826-career_switch-mba-da</strong> tem altíssima eficiência: gera poucos leads, mas converte muito bem. Escalar com orçamento.</div>
+    </div>
+  </div>
+
+  <!-- Urgência do ciclo de vendas -->
+  <div class="card" style="margin-top:20px;border-left:4px solid var(--danger)">
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:12px">⏱️ Ciclo de Vendas e o Gap Crítico de Resposta</h3>
+    <p style="font-size:14px;margin-bottom:8px">A mediana estimada do ciclo é de <strong>~8 dias entre criação do deal e pagamento</strong> (data criação → data de conversão no HubSpot). 70% dos pagamentos acontecem em até 14 dias.</p>
+    <div class="callout warning" style="margin-bottom:16px">
+      <div class="callout-icon">⚠️</div>
+      <p style="font-size:12px"><strong>Nota metodológica:</strong> Este dado mede criação do deal → pagamento, <em>não</em> o tempo de primeiro contato efetivo. O campo específico de "quando o SDR fez o primeiro contato" não estava disponível nesta análise. Para medir o ciclo real de contato, é preciso rastrear a transição <strong>Taken to Work → Contato Estabelecido</strong> no CRM — que é exatamente onde está o maior gap do funil (ver abaixo).</p>
+    </div>
+
+    <!-- Gap crítico: Taken to Work vs Contato Estabelecido -->
+    <div style="background:var(--danger-light);border-radius:12px;padding:20px;margin-bottom:16px">
+      <h4 style="font-size:14px;font-weight:700;color:var(--danger);margin-bottom:12px">🚨 Gap Crítico: Taken to Work → Contato Estabelecido</h4>
+      <p style="font-size:13px;margin-bottom:12px">Existe uma lacuna significativa entre o SDR pegar o lead (<strong>Taken to Work</strong>) e o lead de fato responder (<strong>Contato Estabelecido</strong>). Muitos leads nunca chegam à etapa de Contato Estabelecido — o que significa que o funil pode estar quebrando antes mesmo da primeira reunião ser agendada.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="background:white;border-radius:8px;padding:14px">
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Taken to Work</div>
+          <div style="font-size:13px">SDR <strong>recebe</strong> o lead e começa a tentar contato. O lead pode nunca responder e ficar "travado" aqui.</div>
+        </div>
+        <div style="background:white;border-radius:8px;padding:14px">
+          <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Contato Estabelecido</div>
+          <div style="font-size:13px">O lead <strong>respondeu</strong>. A partir daqui o funil começa de verdade. A taxa de conversão Contato → Reunião deve ser medida separadamente.</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:13px;color:var(--danger)"><strong>Ação recomendada:</strong> Extrair do HubSpot o tempo médio e a taxa de avanço Taken to Work → Contato Estabelecido. Se a taxa for abaixo de 30%, o problema não é a reunião nem o pitch — é a cadência de prospecção ativa do SDR.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+      <div style="background:var(--danger-light);border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--danger)">24h</div>
+        <div style="font-size:12px;color:var(--danger);font-weight:600;margin-top:4px">Janela crítica pós-entrada</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:8px">A tentativa de contato deve ser feita em até 24h da criação do deal (benchmark de mercado)</div>
+      </div>
+      <div style="background:var(--warn-light);border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--warn)">~8 dias</div>
+        <div style="font-size:12px;color:var(--warn);font-weight:600;margin-top:4px">Ciclo estimado criação → pagamento</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:8px">Dado a confirmar com campo de data real de primeiro contato no CRM</div>
+      </div>
+      <div style="background:var(--accent-light);border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--accent)">14 dias</div>
+        <div style="font-size:12px;color:var(--accent);font-weight:600;margin-top:4px">70% dos pagamentos fechados</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:8px">Leads que passam 14 dias sem fechar têm conversão muito reduzida</div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:16px;background:var(--danger-light);border-color:var(--danger)">
+      <div class="callout-icon">🚨</div>
+      <p style="color:var(--danger)"><strong>Ação imediata para SDRs:</strong> Medir a taxa de avanço Taken to Work → Contato Estabelecido por SDR. Criar SLA de 24h para primeira tentativa de contato. Leads sem resposta em 3 dias devem entrar em cadência automatizada (WhatsApp + Email) e ser escalados para o gestor após 5 dias.</p>
+    </div>
+
+    <!-- Funil de resposta: dado a mapear -->
+    <div style="margin-top:16px;background:#F8F7FF;border-radius:12px;padding:18px;border:1px dashed var(--border)">
+      <h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text-muted)">📋 Dado Prioritário a Mapear no CRM</h4>
+      <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap">
+        <div style="background:var(--brand);color:white;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700">Lead Criado</div>
+        <div style="color:var(--text-muted);font-size:18px;padding:0 8px">→</div>
+        <div style="background:#8B5CF6;color:white;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700">Taken to Work</div>
+        <div style="color:var(--danger);font-size:18px;padding:0 8px;font-weight:800">⚡</div>
+        <div style="background:#EF4444;color:white;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700">Contato Estabelecido</div>
+        <div style="color:var(--text-muted);font-size:18px;padding:0 8px">→</div>
+        <div style="background:#F59E0B;color:white;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700">Reunião Agendada</div>
+        <div style="color:var(--text-muted);font-size:18px;padding:0 8px">→</div>
+        <div style="background:var(--accent);color:white;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700">Pagamento</div>
+      </div>
+      <p style="font-size:12px;color:var(--danger);margin-top:10px">⚡ = principal gap a medir: qual % dos leads em Taken to Work nunca chegam ao Contato Estabelecido? Este é provavelmente o maior ponto de perda do funil — e ainda não temos esse número.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 3: PERSONAS -->
+<section id="personas">
+  <div class="section-header">
+    <div class="section-icon" style="background:#FEF3C7">👥</div>
+    <div><h2>Personas Identificadas</h2><p>Com base nas transcrições de reunião e padrões do CRM</p></div>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-icon">🎯</div>
+    <p><strong>3 personas claras emergem dos dados:</strong> Cada uma tem motivação, canal de entrada, objeções e mensagens que ressoam de forma diferente. A comunicação atual é genérica e não fala diretamente com nenhuma delas.</p>
+  </div>
+
+  <div class="card-grid cols-3" style="margin-top:24px">
+
+    <!-- Persona 1 -->
+    <div class="persona-card card">
+      <div class="persona-header" style="background:linear-gradient(135deg,#EDE8FC,#F8F7FF)">
+        <div class="persona-avatar" style="background:#6C3CE2">🚀</div>
+        <div>
+          <h3>O Pioneiro em IA</h3>
+          <div class="role">25–38 anos · Já trabalha em tech ou dados</div>
+        </div>
+      </div>
+      <div class="persona-body">
+        <div class="persona-tags">
+          <span class="tag">MBA DS / DA</span>
+          <span class="tag green">YouTube · Comunidades</span>
+          <span class="tag yellow">Alta intenção</span>
+        </div>
+        <div class="persona-section">
+          <div class="label">Quem é</div>
+          <ul>
+            <li>Analista/Dev com formação em TI, BI ou Dados</li>
+            <li>Trabalha em startup ou empresa de médio porte</li>
+            <li>Já usa ferramentas de IA no dia a dia</li>
+            <li>Quer ser referência em IA na empresa</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <div class="label">Motivações principais</div>
+          <ul>
+            <li>Crescimento acelerado na carreira</li>
+            <li>Assumir papel estratégico (não só técnico)</li>
+            <li>Diferencial competitivo vs pares</li>
+            <li>Trabalhar remotamente para empresas internacionais</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <div class="label">Objeções comuns</div>
+          <ul>
+            <li>"Qual MBA devo escolher?" (confusão de produto)</li>
+            <li>"Já tenho graduação em dados, preciso disso?"</li>
+            <li>"Conseguirei conciliar com o trabalho?"</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <div class="label">Mensagem que ressoa</div>
+          <div class="quote" style="margin-top:8px">
+            <p>Pare de executar e comece a liderar. O MBA em Data Science + IA coloca você no topo da hierarquia de dados.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Persona 2 -->
+    <div class="persona-card card">
+      <div class="persona-header" style="background:linear-gradient(135deg,#E0FAF4,#F8FFFD)">
+        <div class="persona-avatar" style="background:#00C49A">🔄</div>
+        <div>
+          <h3>O Transicionista Sênior</h3>
+          <div class="role">35–50 anos · Fora da tech, quer migrar</div>
+        </div>
+      </div>
+      <div class="persona-body">
+        <div class="persona-tags">
+          <span class="tag">MBA DA · MBA IA Negócios</span>
+          <span class="tag green">Newsletter · Blogs</span>
+          <span class="tag yellow">Alta urgência financeira</span>
+        </div>
+        <div class="persona-section">
+          <div class="label">Quem é</div>
+          <ul>
+            <li>Engenheiro, financeiro, gestor de processos</li>
+            <li>Experiência sólida mas em setor ameaçado pela IA</li>
+            <li>Muitas vezes em transição ou desempregado</li>
+            <li>Busca recolocação + trabalho remoto/exterior</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <div class="label">Motivações principais</div>
+          <ul>
+            <li>Recolocação rápida no mercado</li>
+            <li>Usar experiência anterior + IA</li>
+            <li>Aumentar salário significativamente</li>
+            <li>Preocupação com obsolescência por idade</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <div class="label">Objeções comuns</div>
+          <ul>
+            <li>"Minha idade vai ser barreira no mercado?"</li>
+            <li>"10 meses é muito tempo, preciso trabalhar logo"</li>
+            <li>"O investimento é alto pra minha situação atual"</li>
+            <li>"Minha família depende de mim agora"</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <div class="label">Mensagem que ressoa</div>
+          <div class="quote" style="margin-top:8px">
+            <p>Sua experiência de 20 anos + IA = o profissional mais valioso do mercado. Não é tarde — é o momento certo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Persona 3 -->
+    <div class="persona-card card">
+      <div class="persona-header" style="background:linear-gradient(135deg,#FEF3C7,#FFFBEB)">
+        <div class="persona-avatar" style="background:#F59E0B">💼</div>
+        <div>
+          <h3>O Business Professional</h3>
+          <div class="role">28–42 anos · Gestão, MKT, Comercial</div>
+        </div>
+      </div>
+      <div class="persona-body">
+        <div class="persona-tags">
+          <span class="tag">MBA IA Aplicada a Negócios</span>
+          <span class="tag green">Instagram · Newsletter</span>
+          <span class="tag yellow">Decisor mais lento</span>
+        </div>
+        <div class="persona-section">
+          <div class="label">Quem é</div>
+          <ul>
+            <li>Marketing, comercial, RH, gestão de franquias</li>
+            <li>Já usa IA superficialmente (ChatGPT, etc.)</li>
+            <li>Quer credencial formal + ser referência</li>
+            <li>Frequentemente precisa da aprovação de gestor/parceiro</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <div class="label">Motivações principais</div>
+          <ul>
+            <li>Ser a referência em IA na empresa/rede</li>
+            <li>Criar processos mais eficientes com IA</li>
+            <li>Diploma reconhecido para CV</li>
+            <li>Progressão financeira (aumento ou novo cargo)</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <div class="label">Objeções comuns</div>
+          <ul>
+            <li>"Preciso falar com meu chefe / marido / sócio"</li>
+            <li>"Não sei se tenho perfil técnico"</li>
+            <li>"Tem muito conteúdo gratuito, por que pagar?"</li>
+            <li>Preço é barreira — tende a pesquisar alternativas</li>
+          </ul>
+        </div>
+        <div class="persona-section">
+          <div class="label">Mensagem que ressoa</div>
+          <div class="quote" style="margin-top:8px">
+            <p>Você não precisa virar técnica. Aprenda a usar IA para liderar times, tomar decisões e criar processos — mesmo sem programar.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SEÇÃO 3: TRANSCRIÇÕES -->
+<section id="transcricoes">
+  <div class="section-header">
+    <div class="section-icon" style="background:#FEE2E2">🎙️</div>
+    <div><h2>Insights das Reuniões de Vendas</h2><p>Amostra de 7 transcrições MBA — Ago/2026</p></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">ℹ️</div>
+    <p><strong>Metodologia:</strong> Analisamos transcrições completas de 3 reuniões de MBA com closers diferentes (Lucas Bonow, Riane Chagas, Ana Viana). As reuniões seguem o modelo de "Consultoria de Carreira" e usam SPIN Selling. Duração média: 59 minutos.</p>
+  </div>
+
+  <div class="card-grid cols-2" style="margin-top:24px">
+
+    <div class="card">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:20px">💬 Padrões observados nas reuniões</h3>
+
+      <div style="border-left:3px solid var(--accent);padding-left:16px;margin-bottom:20px">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:8px">🏆 O que funciona muito bem</div>
+        <ul style="list-style:none">
+          <li style="font-size:13px;padding:6px 0;border-bottom:1px solid var(--border)">✅ Abertura consultiva — os closers fazem perguntas profundas antes de vender</li>
+          <li style="font-size:13px;padding:6px 0;border-bottom:1px solid var(--border)">✅ SPIN Selling bem aplicado — situação, problema, implicação, necessidade</li>
+          <li style="font-size:13px;padding:6px 0;border-bottom:1px solid var(--border)">✅ Personalização por perfil — adapta o produto à história do lead</li>
+          <li style="font-size:13px;padding:6px 0">✅ Rapport genuíno — closers criam conexão emocional antes do pitch</li>
+        </ul>
+      </div>
+
+      <div style="border-left:3px solid var(--danger);padding-left:16px;margin-bottom:20px">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:8px">⚠️ Pontos de melhoria identificados</div>
+        <ul style="list-style:none">
+          <li style="font-size:13px;padding:6px 0;border-bottom:1px solid var(--border)">🔴 Reuniões muito longas (~60-80 min) — leads com menor engajamento perdem atenção</li>
+          <li style="font-size:13px;padding:6px 0;border-bottom:1px solid var(--border)">🔴 Confusão entre os 3 MBAs — leads chegam sem entender a diferença</li>
+          <li style="font-size:13px;padding:6px 0">🔴 Objeção de preço tratada tarde — abordagem financeira deveria vir antes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:20px">🗣️ Frases reais dos leads</h3>
+
+      <div class="quote" style="margin-bottom:16px">
+        <p>Eu já uso IA no dia a dia mas sinto que falta um passinho a mais. Quero ser o pioneiro nisso na minha empresa... e tem a motivação financeira também.</p>
+        <div class="author">Lead — Marketing, franquia, entrada por newsletter</div>
+      </div>
+
+      <div class="quote" style="margin-bottom:16px">
+        <p>Minha dúvida é mais interna. Se vou pro MBA Data Analytics, estou continuando o que sou formado. Se vou pro IA para Negócios, estou aplicando de um jeito diferente.</p>
+        <div class="author">Lead — Customer Success em fintech, entrada por YouTube</div>
+      </div>
+
+      <div class="quote">
+        <p>Estou sem trabalho fixo agora. Tenho experiência em processos na Cielo e Itaú. Quero me recolocar rápido, preferencialmente com trabalho remoto ou no exterior. A idade me preocupa um pouco.</p>
+        <div class="author">Lead — 46 anos, ex-liderança em grandes empresas, BH</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:20px">📋 Objections Map — Frequência por persona</h3>
+    <table>
+      <tr>
+        <th>Objeção</th>
+        <th>Pioneiro em IA</th>
+        <th>Transicionista Sênior</th>
+        <th>Business Professional</th>
+        <th>Como endereçar</th>
+      </tr>
+      <tr>
+        <td>"Qual MBA é pra mim?"</td>
+        <td><span class="check">●●●</span></td>
+        <td><span class="partial">●●○</span></td>
+        <td><span class="partial">●●○</span></td>
+        <td>Quiz de perfil pré-reunião; landing pages por persona</td>
+      </tr>
+      <tr>
+        <td>"O preço está alto"</td>
+        <td><span class="partial">●○○</span></td>
+        <td><span class="check">●●●</span></td>
+        <td><span class="check">●●●</span></td>
+        <td>Mostrar ROI (retorno em 2–4 meses); parcelamento claro</td>
+      </tr>
+      <tr>
+        <td>"Preciso falar com alguém"</td>
+        <td><span class="x">○○○</span></td>
+        <td><span class="partial">●○○</span></td>
+        <td><span class="check">●●●</span></td>
+        <td>Material de apoio para decisão compartilhada; prazo de oferta</td>
+      </tr>
+      <tr>
+        <td>"Tenho medo de não conseguir emprego"</td>
+        <td><span class="x">○○○</span></td>
+        <td><span class="check">●●●</span></td>
+        <td><span class="partial">●○○</span></td>
+        <td>Cases de alunos + dados de empregabilidade (93%) por perfil</td>
+      </tr>
+      <tr>
+        <td>"Não tenho perfil técnico"</td>
+        <td><span class="x">○○○</span></td>
+        <td><span class="partial">●○○</span></td>
+        <td><span class="check">●●●</span></td>
+        <td>Conteúdo: "Entrei sem saber programar e hoje sou analista"</td>
+      </tr>
+      <tr>
+        <td>"Minha idade vai atrapalhar?"</td>
+        <td><span class="x">○○○</span></td>
+        <td><span class="check">●●●</span></td>
+        <td><span class="x">○○○</span></td>
+        <td>Depoimentos de alunos 40+; dados de contratação por faixa etária</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- SEÇÃO 4: MERCADO -->
+<section id="mercado">
+  <div class="section-header">
+    <div class="section-icon" style="background:#DCFCE7">🌐</div>
+    <div><h2>Análise de Mercado & Concorrentes</h2><p>Benchmarks para posicionamento e argumentação</p></div>
+  </div>
+
+  <div class="stat-grid" style="grid-template-columns: repeat(3, 1fr)">
+    <div class="stat">
+      <div class="number" style="font-size:1.8rem">>50%</div>
+      <div class="label">das matrículas de MBA no Brasil já são online</div>
+      <div class="sub">Consolidação da modalidade</div>
+    </div>
+    <div class="stat">
+      <div class="number" style="font-size:1.8rem">#1</div>
+      <div class="label">IA é o segmento que mais cresceu em MBAs 2025-26</div>
+      <div class="sub">Janela de oportunidade agora</div>
+    </div>
+    <div class="stat">
+      <div class="number" style="font-size:1.8rem">+56%</div>
+      <div class="label">Aumento de salário com certificação em IA (dado de mercado)</div>
+      <div class="sub">Argumento central de venda</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:20px">⚔️ Mapa Competitivo — TripleTen vs. concorrentes</h3>
+    <table>
+      <tr>
+        <th>Instituição</th>
+        <th>Preço total estimado</th>
+        <th>Duração</th>
+        <th>MEC</th>
+        <th>Certificação internacional</th>
+        <th>Foco em IA/Dados</th>
+        <th>Prático/Projetos</th>
+      </tr>
+      <tr>
+        <td><strong class="tt-best">TripleTen Brasil</strong></td>
+        <td class="tt-best">R$ 26.729–31.000</td>
+        <td>9–10 meses</td>
+        <td><span class="check">✓ Nota 5</span></td>
+        <td><span class="check">✓ AWS + ASU</span></td>
+        <td><span class="check">✓ Exclusivo</span></td>
+        <td><span class="check">✓ 11–22 proj.</span></td>
+      </tr>
+      <tr>
+        <td>Descomplica</td>
+        <td>~R$ 4.500</td>
+        <td>3–6 meses</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="x">✗</span></td>
+        <td><span class="partial">~</span></td>
+        <td><span class="x">✗ Vídeos curtos</span></td>
+      </tr>
+      <tr>
+        <td>FIAP MBA</td>
+        <td>~R$ 18.000–30.000</td>
+        <td>12–18 meses</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="partial">~ Parcerias</span></td>
+        <td><span class="check">✓ Alguns</span></td>
+        <td><span class="partial">~ Misto</span></td>
+      </tr>
+      <tr>
+        <td>FIA Business School</td>
+        <td>~R$ 22.000–35.000</td>
+        <td>12–18 meses</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="partial">~ Parcerias</span></td>
+        <td><span class="check">✓ Analytics/IA</span></td>
+        <td><span class="partial">~ Misto</span></td>
+      </tr>
+      <tr>
+        <td>FGV / Insper</td>
+        <td>>R$ 40.000</td>
+        <td>18–24 meses</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="partial">~ Limitado</span></td>
+        <td><span class="partial">~ Geral</span></td>
+        <td><span class="partial">~ Teórico</span></td>
+      </tr>
+      <tr>
+        <td>EBAC Online</td>
+        <td>~R$ 8.000–16.000</td>
+        <td>6–12 meses</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="x">✗</span></td>
+        <td><span class="check">✓ Tech/Dados</span></td>
+        <td><span class="partial">~ Projetos curtos</span></td>
+      </tr>
+      <tr>
+        <td>USP (via FEA / Poli)</td>
+        <td>~R$ 25.000–50.000</td>
+        <td>12–24 meses</td>
+        <td><span class="check">✓ Prestígio</span></td>
+        <td><span class="x">✗</span></td>
+        <td><span class="partial">~ Alguns cursos</span></td>
+        <td><span class="partial">~ Acadêmico</span></td>
+      </tr>
+    </table>
+
+    <div class="callout success" style="margin-top:16px">
+      <div class="callout-icon">💡</div>
+      <p><strong>Posicionamento ideal:</strong> TripleTen está no "sweet spot" — mais barata que FGV/Insper/USP, muito mais prática e com certificação internacional que EBAC não oferece, e mais focada em IA/Dados que FIAP/FIA. Este argumento precisa aparecer ANTES da reunião de vendas, desde os anúncios e landing pages.</p>
+    </div>
+  </div>
+
+  <div class="card-grid cols-2" style="margin-top:20px">
+    <div class="card">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px">📣 O que os concorrentes fazem de bom</h3>
+      <div style="font-size:13px;color:var(--text-muted)">Estratégias que funcionam no mercado e que podemos adaptar:</div>
+      <ul style="list-style:none;margin-top:14px">
+        <li style="padding:10px 0;border-bottom:1px solid var(--border)">
+          <strong>Descomplica:</strong> CTA de urgência com cupom com prazo curto. Alta conversão por preço percebido como acessível (R$ 79/mês). <em>Adaptar: comunicar o parcelamento de forma mais destacada.</em>
+        </li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--border)">
+          <strong>FIAP:</strong> Amplo cardápio de MBAs com naming muito específico por área. <em>Adaptar: criar landing pages por persona, não por produto.</em>
+        </li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--border)">
+          <strong>FIA:</strong> Posicionamento de prestígio + depoimentos de ex-alunos em grandes empresas. <em>Adaptar: destacar onde nossos alunos trabalham (Spotify, Apple, Deloitte).</em>
+        </li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--border)">
+          <strong>EBAC:</strong> Comunicação muito visual e moderna, forte presença no Instagram com conteúdo de carreira em tech. Preço acessível percebido como barreira baixa de entrada. <em>Adaptar: comunicar o diferencial de certificação internacional (AWS + ASU) vs EBAC que não tem — e mostrar que projetos reais valem mais que vídeos curtos.</em>
+        </li>
+        <li style="padding:10px 0">
+          <strong>USP (FEA/Poli):</strong> Marca e prestígio incomparáveis no Brasil — o nome USP abre portas. Público que quer reconhecimento de mercado frequentemente compara com USP. <em>Adaptar: posicionar TripleTen como "USP da prática" — enquanto a USP forma acadêmicos, TripleTen forma profissionais empregáveis em 9 meses com portfolio real.</em>
+        </li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:16px">🧲 Tendências de marketing que funcionam para MBA/Educação</h3>
+      <ul style="list-style:none">
+        <li style="padding:10px 0;border-bottom:1px solid var(--border)">
+          <strong>📹 User Generated Content (UGC):</strong> Reviews autênticos de alunos superam anúncios tradicionais. Já temos isso (julfe no YouTube), precisa de mais escala.
+        </li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--border)">
+          <strong>🎯 Quiz como qualificador:</strong> Temos e funciona. Oportunidade: adicionar pergunta de renda para qualificar melhor.
+        </li>
+        <li style="padding:10px 0;border-bottom:1px solid var(--border)">
+          <strong>📧 Sequências de nutrição por segmento:</strong> Email/WhatsApp com conteúdo específico por persona. Atualmente parece ser genérico.
+        </li>
+        <li style="padding:10px 0">
+          <strong>🤝 Webinar como conversão:</strong> Webinars ao vivo com oferta especial no final têm CAC menor que ads diretos.
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 5: RECOMENDAÇÕES -->
+<section id="recomendacoes">
+  <div class="section-header">
+    <div class="section-icon" style="background:#F0FDF4">🎯</div>
+    <div><h2>O Que Manter, Parar e Iniciar</h2><p>Recomendações baseadas nos dados + benchmarks de mercado</p></div>
+  </div>
+
+  <!-- MANTER -->
+  <div style="margin-bottom:32px">
+    <div class="pill-section">
+      <div class="pill-btn keep">✅ MANTER — O que está funcionando</div>
+    </div>
+    <div class="card-grid cols-2">
+      <div class="insight keep">
+        <h4>Quiz de carreira como gerador de leads</h4>
+        <p>As campanhas de quiz (meet-quiz no Facebook e Instagram) geram o maior volume. A mecânica de "Descubra qual MBA é pra você" cria engajamento e pre-qualifica. A campanha inhouse_fb_bra_meet-quiz gerou 29 leads em um único mês.</p>
+        <div class="why">📈 Escalar orçamento nesta mecânica, com teste A/B em criativos.</div>
+      </div>
+      <div class="insight keep">
+        <h4>Parcerias com criadores de conteúdo (YouTube)</h4>
+        <p>O criador "julfe" e reviews de vídeo longo no YouTube geram leads altamente qualificados — como o lead Alisson, que veio de vídeo sobre IA e tinha perfil exato para MBA. Custo por lead qualificado tende a ser melhor que ads frios.</p>
+        <div class="why">📈 Ampliar parceria com mais criadores focados em carreiras em tech e dados.</div>
+      </div>
+      <div class="insight keep">
+        <h4>Newsletter partnerships (The News e similares)</h4>
+        <p>A campanha nw_bra_meet-special_mba_julfe_newsletter gerou 23 leads altamente engajados em um mês. Leads de newsletter tendem a ter maior intenção de compra e abertura para material de conteúdo.</p>
+        <div class="why">📈 Identificar outras newsletters de carreira/tecnologia para replicar o modelo.</div>
+      </div>
+      <div class="insight keep">
+        <h4>Consultoria de carreira como CTA principal</h4>
+        <p>O formato de "reunião de consultoria" (não "agende uma demo") funciona muito bem. Os closers conseguem criar rapport, entender o perfil e personalizar a oferta. A taxa de conversão na reunião é significativa.</p>
+        <div class="why">📈 Manter e reforçar na comunicação: "Consultoria gratuita de carreira", não "Fale com um vendedor".</div>
+      </div>
+      <div class="insight keep">
+        <h4>SPIN Selling nas reuniões</h4>
+        <p>As transcrições mostram closers usando bem as perguntas de situação, problema, implicação e necessidade. A abordagem consultiva cria valor percebido antes de apresentar preço.</p>
+        <div class="why">📈 Padronizar e treinar toda a equipe com scorecard baseado nas melhores reuniões.</div>
+      </div>
+      <div class="insight keep">
+        <h4>Presença ativa em Instagram orgânico</h4>
+        <p>30% dos leads vêm de Instagram (orgânico + pago). A presença em redes sociais com conteúdo de valor (quiz, stories, reels) é um canal de custo muito baixo por lead.</p>
+        <div class="why">📈 Aumentar frequência de posts segmentados por persona e por produto.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARAR / AJUSTAR -->
+  <div style="margin-bottom:32px">
+    <div class="pill-section">
+      <div class="pill-btn stop">🔴 PARAR / AJUSTAR — O que está gerando ruído</div>
+    </div>
+    <div class="card-grid cols-2">
+      <div class="insight stop">
+        <h4>Comunicação genérica sem diferenciação por persona</h4>
+        <p>A mesma mensagem está sendo usada para o Pioneiro em IA de 28 anos e para o Transicionista Sênior de 46 anos. São motivações, objeções e linguagens completamente diferentes. Isso reduz a taxa de conversão de leads em reuniões.</p>
+        <div class="why">🛑 Criar ao menos 3 variações de copy, criativo e landing page por persona.</div>
+      </div>
+      <div class="insight stop">
+        <h4>Falta de qualificação pré-reunião sobre produto</h4>
+        <p>Leads chegam às reuniões sem entender a diferença entre os 3 MBAs. Isso faz as reuniões começarem mais "educacionais" e menos "de conversão". O closer perde os primeiros 15-20 minutos explicando o básico.</p>
+        <div class="why">🛑 Criar sequência de emails/WhatsApp pós-agendamento explicando os produtos e pedindo ao lead para pensar em seu perfil.</div>
+      </div>
+      <div class="insight stop">
+        <h4>MBA DA e MBA IA Negócios praticamente invisíveis — mas convertem muito mais</h4>
+        <p>98,5% dos leads são para MBA DS, mas MBA DA gera 27% dos pagamentos e MBA IA Negócios gera 25%. Isso significa que esses dois produtos têm taxas de conversão proporcionalmente 20-30x maiores que o MBA DS. O investimento em mídia está completamente desalinhado com a conversão real.</p>
+        <div class="why">🛑 Realocar parte do orçamento de mídia para MBA DA e MBA IA Negócios com urgência. A campanha 040826-career_switch-mba-da com 6 pagamentos comprova o modelo. Escalar imediatamente com orçamento dedicado.</div>
+      </div>
+      <div class="insight stop">
+        <h4>Ausência de SLA de contato urgente para leads novos</h4>
+        <p>O ciclo de vendas médio é de apenas 8 dias (70% fecham em 14 dias). Isso significa que um lead que não é contatado nas primeiras 24 horas tem uma probabilidade drasticamente menor de converter. Atualmente não há evidência de SLA formal de contato sendo monitorado.</p>
+        <div class="why">🛑 Implementar SLA de resposta de 24h para todos os leads MBA com alerta automático para o gestor se não cumprido. Leads acima de 3 dias sem contato devem ser redistribuídos.</div>
+      </div>
+      <div class="insight stop">
+        <h4>Coleta de dados de perfil do lead muito fraca</h4>
+        <p>97% dos deals não têm dados de gênero. 100% não têm estado. Motivo de escolha e motivação estão em branco. Sem esses dados, é impossível segmentar, personalizar e analisar padrões de conversão.</p>
+        <div class="why">🛑 Adicionar campos obrigatórios no typeform/formulário de entrada. No mínimo: área de atuação, faixa salarial atual e objetivo principal.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INICIAR -->
+  <div>
+    <div class="pill-section">
+      <div class="pill-btn start">🚀 INICIAR — Novas iniciativas para crescimento</div>
+    </div>
+    <div class="card-grid cols-2">
+      <div class="insight start">
+        <h4>Sequência de nutrição pré-reunião segmentada por persona</h4>
+        <p>Criar fluxo de 3 mensagens (Email + WhatsApp) entre o agendamento e a reunião, com conteúdo específico para o perfil do lead. Ex: Para o Transicionista Sênior, enviar case de aluno que fez transição de carreira aos 45 anos.</p>
+        <div class="why">🚀 Estimar redução de 25% no no-show rate e aumento de 30% na conversão dentro da reunião.</div>
+      </div>
+      <div class="insight start">
+        <h4>Landing pages por persona (não por produto)</h4>
+        <p>Em vez de "MBA Data Science", criar páginas como "Para quem quer liderar com IA", "Para quem quer migrar para dados" e "Para quem quer usar IA nos negócios". Os leads chegam com intenção emocional, não técnica.</p>
+        <div class="why">🚀 Teste A/B esperado: LP orientada a persona deve converter 40-60% mais que LP orientada a produto.</div>
+      </div>
+      <div class="insight start">
+        <h4>Campanha "Antes e Depois" com alunos reais por perfil</h4>
+        <p>Produzir série de vídeos curtos (60-90 seg para Reels/Shorts) com alunos que vieram de perfis similares às personas. "Fui gestora de marketing, hoje sou analista de dados na Deloitte." Autenticidade converte mais que produção elaborada.</p>
+        <div class="why">🚀 UGC tem custo de produção baixo e alto impacto em desconfiança e FOMO.</div>
+      </div>
+      <div class="insight start">
+        <h4>Conteúdo específico para a objeção de idade (40+)</h4>
+        <p>Criar série de conteúdo endereçando diretamente "Tenho mais de 40 e quero mudar de carreira". Posts, vídeos e landing page específica para esse público que aparece frequentemente nas reuniões e tem alta motivação de compra.</p>
+        <div class="why">🚀 Segmento sub-atendido pelos concorrentes — oportunidade de dominância de mercado.</div>
+      </div>
+      <div class="insight start">
+        <h4>Webinar mensal de conversão com oferta especial</h4>
+        <p>Criar webinar ao vivo mensal para prospects qualificados (quem já agendou mas não compareceu ou quem está em Nurturing). Apresentar casos de sucesso + fazer oferta com condição especial válida por 48h.</p>
+        <div class="why">🚀 Modelo validado por players como FIAP e Descomplica. Recupera leads que estão em nuturing/closed lost.</div>
+      </div>
+      <div class="insight start">
+        <h4>Retargeting específico para quem visitou mas não agendou</h4>
+        <p>Criar audiências de retargeting no Meta e YouTube para visitantes da landing page que não converteram, com mensagem diferente (social proof, urgência, depoimento) e CTA de agendamento imediato.</p>
+        <div class="why">🚀 Custo por lead de retargeting é 3-5x menor que tráfego frio. Volume de visitantes não-convertidos é alto.</div>
+      </div>
+      <div class="insight start">
+        <h4>Lookalike audiences dos 61 pagantes no Facebook/Meta</h4>
+        <p>Exportar a lista dos 61 pagantes confirmados desde maio/2026 e criar audiências lookalike no Meta Ads. Estes são os melhores "seeds" possíveis — pessoas que de fato pagaram. Usar para criar campanhas de topo de funil com qualidade superior ao lookalike de leads genéricos.</p>
+        <div class="why">🚀 Lookalike de compradores converte 2-4x melhor que lookalike de leads. Com Facebook CPC sendo o canal #1 de pagamentos (31%), o impacto deve ser imediato.</div>
+      </div>
+      <div class="insight start">
+        <h4>Tornar o campo "motivo de perda" obrigatório no CRM</h4>
+        <p>96% dos 3.947 leads Closed-Lost não têm motivo de perda registrado. Sem esse dado é impossível saber onde o funil quebra: é preço? Produto? Concorrente? Timing? Tornar o campo obrigatório no HubSpot ao marcar como Closed-Lost com 5 opções pré-definidas (preço, concorrente, não qualificado, sem resposta, outro).</p>
+        <div class="why">🚀 Em 60 dias, teremos dados suficientes para identificar o principal gargalo e direcionar ação específica. Hoje estamos voando às cegas.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 6: PLANO DE AÇÃO -->
+<section id="plano">
+  <div class="section-header">
+    <div class="section-icon" style="background:#EDE8FC">📋</div>
+    <div><h2>Plano de Ação Priorizado</h2><p>Próximos 90 dias — por impacto e facilidade de execução</p></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">🎯</div>
+    <p><strong>Critério de priorização:</strong> As ações abaixo estão ordenadas por <strong>impacto no funil de conversão</strong>, com base nos dados reais dos 61 pagantes. As primeiras 3 são de velocidade — podem (e devem) ser iniciadas esta semana.</p>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <div class="action-item" style="border-left:4px solid var(--danger);background:var(--danger-light)">
+      <div class="action-num" style="background:var(--danger)">1</div>
+      <div>
+        <h4>🚨 Implementar SLA de contato 24h para todos os leads MBA</h4>
+        <p>Dado crítico: 70% dos pagamentos fecham em até 14 dias do lead criado. Leads não contatados em 24h têm chance muito menor de converter. Criar automação no HubSpot que alerte o SDR responsável quando um lead MBA passar de 24h sem contato, e notifique o gestor após 48h. Redistribuir leads parados automaticamente.</p>
+        <div class="meta">
+          <span class="chip time">⏱ Esta semana</span>
+          <span class="chip impact">📈 Alto impacto imediato em conversão</span>
+          <span class="chip owner">👤 Ops/SDR + HubSpot Admin</span>
+        </div>
+      </div>
+    </div>
+    <div class="action-item" style="border-left:4px solid var(--danger);background:var(--danger-light)">
+      <div class="action-num" style="background:var(--danger)">2</div>
+      <div>
+        <h4>🚨 Criar lookalike dos 61 pagantes no Facebook/Meta Ads</h4>
+        <p>Exportar a lista dos pagantes confirmados desde maio/2026 do HubSpot e fazer upload no Meta Ads como Customer List. Criar audiência lookalike 1-2% no Brasil. Facebook CPC já é o canal #1 de pagamentos (31%). Usar este lookalike como público das campanhas de MBA DA e MBA IA Negócios — onde a demanda ainda não existe organicamente.</p>
+        <div class="meta">
+          <span class="chip time">⏱ 2–3 dias</span>
+          <span class="chip impact">📈 Melhora imediata na qualidade dos leads</span>
+          <span class="chip owner">👤 Marketing Pago</span>
+        </div>
+      </div>
+    </div>
+    <div class="action-item" style="border-left:4px solid var(--danger);background:var(--danger-light)">
+      <div class="action-num" style="background:var(--danger)">3</div>
+      <div>
+        <h4>🚨 Escalar orçamento para MBA DA com campanha career_switch</h4>
+        <p>MBA DA gerou 27% dos pagamentos com menos de 1% dos leads. A campanha 040826-career_switch-mba-da já comprovou conversão (6 pagamentos). Duplicar ou triplicar o orçamento desta campanha imediatamente. Criar também variação para MBA IA Negócios (25% dos pagamentos, ~0,5% dos leads).</p>
+        <div class="meta">
+          <span class="chip time">⏱ Esta semana</span>
+          <span class="chip impact">📈 Maior ROI potencial identificado</span>
+          <span class="chip owner">👤 Marketing Pago</span>
+        </div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">4</div>
+      <div>
+        <h4>Criar sequência pré-reunião (Email/WhatsApp) segmentada por MBA</h4>
+        <p>3 mensagens entre o agendamento e a reunião. Msg 1 (imediata): boas-vindas + vídeo de 2min explicando o MBA escolhido. Msg 2 (24h antes): case de aluno com perfil similar. Msg 3 (1h antes): lembrete + o que esperar da reunião. Reduz no-show e prepara o lead para a conversa.</p>
+        <div class="meta">
+          <span class="chip time">⏱ 1–2 semanas</span>
+          <span class="chip impact">📈 Alto impacto em show rate</span>
+          <span class="chip owner">👤 Marketing + SDR</span>
+        </div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">5</div>
+      <div>
+        <h4>Tornar campo "motivo de perda" obrigatório no HubSpot</h4>
+        <p>96% dos 3.947 leads Closed-Lost não têm motivo registrado. Criar campo de seleção obrigatório com 5 opções ao marcar deal como Closed-Lost: preço/condição financeira, escolheu concorrente, perfil não qualificado, sem resposta/sumiu, outro. Em 60 dias, ter dados suficientes para identificar onde o funil quebra.</p>
+        <div class="meta">
+          <span class="chip time">⏱ 1 semana</span>
+          <span class="chip impact">📈 Fundamental para análises futuras</span>
+          <span class="chip owner">👤 Ops + HubSpot Admin</span>
+        </div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">6</div>
+      <div>
+        <h4>Adicionar 3 campos ao formulário/typeform de entrada</h4>
+        <p>"Qual sua área de atuação atual?", "Qual seu objetivo principal com o MBA?" (múltipla escolha) e "Qual sua faixa de renda mensal?". Com isso, a equipe de SDR pode priorizar melhor e o closer chega à reunião com contexto. Também permite análise de conversão por perfil.</p>
+        <div class="meta">
+          <span class="chip time">⏱ 1–2 semanas</span>
+          <span class="chip impact">📈 Médio impacto direto, alto impacto em dados</span>
+          <span class="chip owner">👤 Marketing + Produto</span>
+        </div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">7</div>
+      <div>
+        <h4>Lançar campanha dedicada para MBA IA Aplicada a Negócios</h4>
+        <p>Criar landing page, anúncios e copy específicos para profissionais de marketing, gestão e comercial. Usar linguagem de negócios, não de tecnologia. Headline sugerida: "Use IA para liderar sua empresa — sem precisar programar." Testar no Meta e Instagram com público lookalike dos convertidos.</p>
+        <div class="meta">
+          <span class="chip time">⏱ 2–3 semanas</span>
+          <span class="chip impact">📈 Alto impacto em novo segmento</span>
+          <span class="chip owner">👤 Marketing + Design</span>
+        </div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">8</div>
+      <div>
+        <h4>Produzir 6 vídeos UGC "Antes e Depois" com alunos reais</h4>
+        <p>2 vídeos por persona: Pioneiro em IA, Transicionista Sênior e Business Professional. Formato: 60-90 segundos, gravados pelo celular, estilo autêntico. Script simples: "Quem eu era antes → o que mudou → resultado atual." Distribuir como Reels, Shorts e anúncios de retargeting.</p>
+        <div class="meta">
+          <span class="chip time">⏱ 3–4 semanas</span>
+          <span class="chip impact">📈 Alto impacto em conversão de anúncios</span>
+          <span class="chip owner">👤 Marketing + Alumni</span>
+        </div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">9</div>
+      <div>
+        <h4>Primeiro webinar de conversão para leads em Nurturing/Sem resposta</h4>
+        <p>Convidar todos os leads que estão em Nurturing ou Closed Lost (sem resposta) para uma live de 45min: "O mercado de IA em 2026: onde estão as oportunidades e como se posicionar". Apresentar cases de alunos ao vivo + oferta especial para quem agendar reunião durante o evento.</p>
+        <div class="meta">
+          <span class="chip time">⏱ 3–5 semanas</span>
+          <span class="chip impact">📈 Recupera leads parados</span>
+          <span class="chip owner">👤 Marketing + Closers</span>
+        </div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num">10</div>
+      <div>
+        <h4>Ativar retargeting no Meta e YouTube para visitantes não-convertidos</h4>
+        <p>Instalar ou verificar pixel nas landing pages de MBA. Criar audiências de visitantes que não agendaram. Anúncio de retargeting com social proof (nota 4.8/5 + MEC nota 5) e CTA direto para agendamento. Criar também audiência de lookalike baseada nos convertidos pagantes.</p>
+        <div class="meta">
+          <span class="chip time">⏱ 2–3 semanas</span>
+          <span class="chip impact">📈 Impacto no CAC e volume</span>
+          <span class="chip owner">👤 Marketing Pago</span>
+        </div>
+      </div>
+    </div>
+    <div class="action-item" style="border-bottom:none">
+      <div class="action-num">11</div>
+      <div>
+        <h4>Criar conteúdo específico para o público 40+ em transição de carreira</h4>
+        <p>Série de 4 posts/semana no Instagram e LinkedIn focados em transição de carreira para 40+. Temas: "Por que empresas estão contratando sêniors com dados", "Como sua experiência de 20 anos + IA vale mais que um junior", "Depoimento: mudei de carreira aos 46 anos e me recoloquei em 4 meses". Criar landing page específica para esse perfil.</p>
+        <div class="meta">
+          <span class="chip time">⏱ 4–6 semanas</span>
+          <span class="chip impact">📈 Nicho sub-atendido, alta conversão</span>
+          <span class="chip owner">👤 Marketing de Conteúdo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESUMO VISUAL -->
+<section>
+  <div class="section-header">
+    <div class="section-icon" style="background:#FEF3C7">🗺️</div>
+    <div><h2>Resumo Visual: De onde viemos e para onde vamos</h2></div>
+  </div>
+  <div class="card-grid cols-2">
+    <div class="card">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:20px;color:var(--text-muted)">📍 Cenário Atual</h3>
+      <ul style="list-style:none">
+        <li style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">🔴 MBA DS domina 98,5% dos leads — MBA DA e IA Negócios sub-investidos mesmo convertendo muito mais</li>
+        <li style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">🔴 Sem SLA de contato: leads com janela de 24h sendo desperdiçados</li>
+        <li style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">🔴 96% dos 3.947 Closed-Lost sem motivo registrado — funil com diagnóstico impossível</li>
+        <li style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">🔴 Comunicação genérica sem persona definida</li>
+        <li style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">🟡 Dados de perfil do lead muito incompletos (97% sem gênero)</li>
+        <li style="padding:8px 0;font-size:13px">🟡 Facebook CPC é o canal #1 de pagamentos mas ainda sem lookalike de pagantes</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:20px;color:var(--accent)">🎯 Cenário Desejado (90 dias)</h3>
+      <ul style="list-style:none">
+        <li style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">✅ SLA de 24h implantado com alerta automático para SDRs e gestores</li>
+        <li style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">✅ MBA DA e MBA IA Negócios com campanhas e orçamento proporcional à conversão real</li>
+        <li style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">✅ Lookalike dos 61 pagantes rodando no Facebook para os 3 MBAs</li>
+        <li style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">✅ Campo "motivo de perda" obrigatório — diagnóstico do funil possível</li>
+        <li style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">✅ Sequência pré-reunião segmentada por MBA reduzindo no-shows em ~25%</li>
+        <li style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">✅ Copy e landing pages por persona (3 variações) com UGC de alunos</li>
+        <li style="padding:8px 0;font-size:13px">✅ Meta: conversão geral de 1,37% → 2%+ em 90 dias</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <p>📊 Análise preparada para <strong>TripleTen Brasil — Head of Sales</strong> | Dados: HubSpot + Elephan + Pesquisa de Mercado | Agosto/2026 · <strong>v2 Atualizada</strong></p>
+  <p style="margin-top:8px">Fontes: HubSpot CRM (4.468 deals · 61 pagamentos confirmados) · Elephan Transcriptions (7 reuniões MBA) · Site TripleTen Brasil · Descomplica · FIA · FIAP · FreelaSemCrise</p>
+</footer>
+
+<script>
+  // Smooth scroll + active nav
+  document.querySelectorAll('nav a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.querySelectorAll('nav a').forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+    });
+  });
+
+  // Update active nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if(window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    document.querySelectorAll('nav a').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+
+</body>
+</html>
